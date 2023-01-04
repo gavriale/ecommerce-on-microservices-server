@@ -1,0 +1,83 @@
+services:
+  inventory.api:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: Services/Inventory/Inventory.API/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: inventoryapi
+    ports:
+    - target: 80
+  login.api:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: Services/Login/Login.API/Dockerfile
+    container_name: loginapi
+    depends_on:
+      mysqldb:
+        condition: service_started
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DBHOST: userdb
+    image: loginapi
+    ports:
+    - published: 8000
+      target: 80
+    - target: 80
+    restart: always
+  marketplace.api:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: Services/Marketplace/Marketplace.API/Dockerfile
+    container_name: marketplaceapi
+    depends_on:
+      mysqldb:
+        condition: service_started
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DBHOST: marketdb
+    image: marketplaceapi
+    ports:
+    - published: 8001
+      target: 80
+    - target: 80
+    restart: always
+  mysqldb:
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
+    image: mysql
+    restart: always
+    volumes:
+    - C:\order-microservice\src\data:/var/lib/mysql:rw
+  ocelotapigw:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: ApiGateways/OcelotApiGateway/Dockerfile
+    container_name: ocelotapigw
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: ocelotapigw
+    ports:
+    - published: 5011
+      target: 80
+    - target: 80
+  order.api:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: Services/Order/Order.API/Dockerfile
+    container_name: orderapi
+    depends_on:
+      mysqldb:
+        condition: service_started
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DBHOST: orderdb
+    image: orderapi
+    ports:
+    - published: 8002
+      target: 80
+    - target: 80
+    restart: always
+version: '3.4'

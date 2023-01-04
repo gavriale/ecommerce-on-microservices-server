@@ -1,0 +1,143 @@
+version: '3.4'
+
+
+services:
+
+  mysqldb:
+    image: mysql
+    container_name: mysqldb
+    restart: always
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_USER: root
+
+
+  login.api:
+    image: ${DOCKER_REGISTRY-}loginapi
+    container_name: loginapi
+    build:
+      context: .
+      dockerfile: Services/Login/Login.API/Dockerfile
+    depends_on:
+        - mysqldb
+    ports:
+        - "8000:80"
+    restart: always
+    environment:
+        - DBHOST=userdb
+        - ASPNETCORE_ENVIRONMENT=Development
+
+
+  marketplace.api:
+    image: ${DOCKER_REGISTRY-}marketplaceapi
+    container_name: marketplaceapi
+    build:
+      context: .
+      dockerfile: Services/Marketplace/Marketplace.API/Dockerfile
+    depends_on:
+        - mysqldb
+    ports:
+        - "8001:80"
+    restart: always
+    environment:
+        - DBHOST=marketdb
+        - ASPNETCORE_ENVIRONMENT=Development
+
+  ocelotapigw:
+    image: ${DOCKER_REGISTRY-}ocelotapigw
+    container_name: ocelotapigw
+    build:
+      context: .
+      dockerfile: ApiGateways/OcelotApiGateway/Dockerfile
+    ports:
+        - "5011:80"
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+
+  order.api:
+    image: ${DOCKER_REGISTRY-}orderapi
+    container_name: orderapi
+    build:
+      context: .
+      dockerfile: Services/Order/Order.API/Dockerfile
+    depends_on:
+        - mysqldb
+    ports:
+        - "8002:80"
+    restart: always
+    environment:
+        - DBHOST=orderdb
+        - ASPNETCORE_ENVIRONMENT=Development
+
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq 
+    restart: always
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+
+
+  stock.api:
+    image: ${DOCKER_REGISTRY-}stockapi
+    container_name: stockapi
+    build:
+      context: .
+      dockerfile: Services/Stock/Stock.API/Dockerfile
+    depends_on:
+        - mysqldb
+    ports:
+        - "8004:80"
+    restart: always
+    environment:
+        - DBHOST=stockdb
+        - ASPNETCORE_ENVIRONMENT=Development
+
+
+  inventory.api:
+    image: ${DOCKER_REGISTRY-}inventoryapi
+    build:
+      context: .
+      dockerfile: Services/Inventory/Inventory.API/Dockerfile
+    depends_on:
+        - mysqldb
+    ports:
+        - "8005:80"
+    restart: always
+    environment:
+        - DBHOST=inventorydb
+        - ASPNETCORE_ENVIRONMENT=Development
+
+
+  shipping.api:
+    image: ${DOCKER_REGISTRY-}shippingapi
+    container_name: shippingapi
+    build:
+      context: .
+      dockerfile: Services/Shipping/Shipping.API/Dockerfile
+    depends_on:
+        - mysqldb
+    ports:
+        - "8006:80"
+    restart: always
+    environment:
+        - DBHOST=shippingdb
+        - ASPNETCORE_ENVIRONMENT=Development
+
+  balance.api:
+    image: ${DOCKER_REGISTRY-}balanceapi
+    container_name: balanceapi
+    build:
+      context: .
+      dockerfile: Services/Balance/Balance.API/Dockerfile
+    depends_on:
+        - mysqldb
+    ports:
+        - "8007:80"
+    restart: always
+    environment:
+        - DBHOST=balancedb
+        - ASPNETCORE_ENVIRONMENT=Development

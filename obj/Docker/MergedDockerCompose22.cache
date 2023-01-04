@@ -1,0 +1,210 @@
+services:
+  inventory.api:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: Services/Inventory/Inventory.API/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Inventory.API
+      target: base
+    container_name: inventoryapi
+    depends_on:
+      mysqldb:
+        condition: service_started
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DBHOST: inventorydb
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: inventoryapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  ""'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 8003
+      target: 80
+    - target: 80
+    restart: always
+    tty: true
+    volumes:
+    - C:\order-microservice\src\Services\Inventory\Inventory.API:/app:rw
+    - C:\Users\sashag\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\sashag\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\sashag\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\sashag\.nuget\packages:/root/.nuget/packages:ro
+    - C:\order-microservice\src:/src:rw
+  login.api:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: Services/Login/Login.API/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Login.API
+      target: base
+    container_name: loginapi
+    depends_on:
+      mysqldb:
+        condition: service_started
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DBHOST: userdb
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: loginapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net5.0/Login.API.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 8000
+      target: 80
+    - target: 80
+    restart: always
+    tty: true
+    volumes:
+    - C:\order-microservice\src\Services\Login\Login.API:/app:rw
+    - C:\Users\sashag\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\sashag\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\sashag\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\sashag\.nuget\packages:/root/.nuget/packages:ro
+    - C:\order-microservice\src:/src:rw
+  marketplace.api:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: Services/Marketplace/Marketplace.API/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Marketplace.API
+      target: base
+    container_name: marketplaceapi
+    depends_on:
+      mysqldb:
+        condition: service_started
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DBHOST: marketdb
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: marketplaceapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net5.0/Marketplace.API.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 8001
+      target: 80
+    - target: 80
+    restart: always
+    tty: true
+    volumes:
+    - C:\order-microservice\src\Services\Marketplace\Marketplace.API:/app:rw
+    - C:\Users\sashag\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\sashag\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\sashag\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\sashag\.nuget\packages:/root/.nuget/packages:ro
+    - C:\order-microservice\src:/src:rw
+  mysqldb:
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
+    image: mysql
+    restart: always
+    volumes:
+    - C:\order-microservice\src\data:/var/lib/mysql:rw
+  ocelotapigw:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: ApiGateways/OcelotApiGateway/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: OcelotApiGw
+      target: base
+    container_name: ocelotapigw
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: ocelotapigw:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net5.0/OcelotApiGw.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 5011
+      target: 80
+    - target: 80
+    tty: true
+    volumes:
+    - C:\order-microservice\src\ApiGateways\OcelotApiGateway:/app:rw
+    - C:\Users\sashag\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\sashag\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\sashag\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\sashag\.nuget\packages:/root/.nuget/packages:ro
+    - C:\order-microservice\src:/src:rw
+  order.api:
+    build:
+      context: C:\order-microservice\src
+      dockerfile: Services/Order/Order.API/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: Order.API
+      target: base
+    container_name: orderapi
+    depends_on:
+      mysqldb:
+        condition: service_started
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DBHOST: orderdb
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: orderapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net5.0/Order.API.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 8002
+      target: 80
+    - target: 80
+    restart: always
+    tty: true
+    volumes:
+    - C:\order-microservice\src\Services\Order\Order.API:/app:rw
+    - C:\Users\sashag\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\sashag\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\sashag\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\sashag\.nuget\packages:/root/.nuget/packages:ro
+    - C:\order-microservice\src:/src:rw
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+    - published: 5672
+      target: 5672
+    - published: 15672
+      target: 15672
+    restart: always
+version: '3.4'

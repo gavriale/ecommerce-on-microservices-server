@@ -1,0 +1,2 @@
+﻿2022-05-31 11:43:33.946 INFO  Logging to 'C:\order-microservice\src\Services\Order\Order.API\bin\Debug\net5.0\' with level Info
+2022-05-31 11:43:34.067 INFO  No valid license could be found. Falling back to trial license with start date '2022-05-31'.
