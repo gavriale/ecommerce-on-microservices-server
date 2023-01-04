@@ -55,42 +55,6 @@ namespace Order.API.Controllers
                 .Where(o => o.UserId == id).Include(x => x.OrderItem).ToListAsync();
 
             var ordersToReturn = _mapper.Map<IEnumerable<UserOrdersDto>>(res);
-
-            //var text = JsonConvert.SerializeObject(res, Formatting.None,
-            //            new JsonSerializerSettings()
-            //            {
-            //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //            });
-
-
-            //log.LogInformation($"**** {text}");
-
-            //var userOrders = new List<UserOrdersDto>();
-
-
-            /*
-            foreach (var order in res)
-            {
-                userOrders.Add(new UserOrdersDto
-                {
-                    Id = order.Id,
-                    Price = order.Price,
-                    ProductId = order.OrderItem.ProductId,
-                    Quantity = order.OrderItem.Quantity,
-                    DateOfShipment = order.DateOfShipmment,
-                    Status = order.Status,
-                });
-            }
-            */
-            
-            //var text2 = JsonConvert.SerializeObject(userOrders, Formatting.None,
-            //            new JsonSerializerSettings()
-            //            {
-            //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //            });
-
-            //log.LogInformation($"**** {text2}");
-
             return ordersToReturn;    
         }
 
