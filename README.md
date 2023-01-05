@@ -3,7 +3,7 @@ Ecommerce application server-side implemented with Microservices Event
 Driven Architecture, RabbitMQ, and Docker Containers on .NET.
 
 The client communicates with the server via the ocelot API Gateway service which routes API requests to the server and returns response back to the client.
-The API gateway decouples the client from the backend, allowing to change of the backend without affecting the client.
+The API gateway decouples the client from the backend, allowing to change the backend without affecting the client.
 What is exposed to the client is an API.
 The ocelot gives us the ability to make authorization. Ocelot checks in the header of the request if the request has a bearer token of the user, 
 if the request has a token, then the request will be routed to the routing configured in the ocelot.json file.
