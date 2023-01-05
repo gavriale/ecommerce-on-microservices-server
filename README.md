@@ -1,6 +1,6 @@
 # ecommerce-on-microservices-server
 Ecommerce application server-side implemented with Microservices Event
-Driven Architecture, RabbitMQ, and Docker Containers on .NET.
+Driven Architecture, RabbitMQ,MySQL, and Docker Containers on .NET.
 
 The client communicates with the server via the ocelot API Gateway service which routes API requests to the server and returns response back to the client.
 The API gateway decouples the client from the backend, allowing to change the backend without affecting the client.
