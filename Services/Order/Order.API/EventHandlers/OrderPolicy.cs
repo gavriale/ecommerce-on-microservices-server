@@ -126,10 +126,6 @@ namespace Order.API.EventHandlers
                 //if(dateToShip == today){
                 //  send message to shipment
                 //}
-
-                //while(true) if dateToShip == today send ship message the shipping
-                //Break from infinite loop.
-
                 MarkAsComplete();
             }
         }
